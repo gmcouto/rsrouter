@@ -5,6 +5,8 @@
 **Researched:** 2026-09-28
 **Confidence:** MEDIUM-HIGH
 
+> **⚠ USER OVERRIDE (2026-09-28):** The research recommendations against "fingerprint cloaking" and in favor of a "minimum wire contract only" are **superseded**. OAuth/subscription providers (and any provider with an official client tool) MUST mimic the official tool's requests to be indistinguishable from it: User-Agent, headers, magic bytes, identity blocks, client IDs, OAuth params, and transport fingerprint where feasible. Only prompt content may differ. See AGENTS.md and PROJECT.md (Provider fidelity).
+
 ## Executive Summary
 
 rsrouter is a lean Rust re-implementation of OmniRoute: a self-hosted gateway that lets tools like opencode and Claude Code reach many upstream providers through one client key, in either OpenAI or Anthropic format, with transparent fallback across keys and models. Every mature gateway researched (OmniRoute, CLIProxyAPI, new-api, Helicone, LiteLLM) has the same six parts: format-specific ingress handlers, a translation layer, per-provider adapters, key selection with cooldowns and refresh, combo/fallback orchestration, and persistence plus logs. OmniRoute's weaknesses are architectural: 6,000-line god handlers, a lossy OpenAI-chat hub format, and several overlapping cooldown layers. The research is clear on this point: **port OmniRoute's wire contracts (URLs, headers, OAuth parameters, quota endpoints, error signals), not its code shape.**

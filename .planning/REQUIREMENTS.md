@@ -83,6 +83,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **OAUTH-03**: OAuth tokens refresh automatically before expiry, with at most one concurrent refresh per credential and atomic persistence of rotated refresh tokens
 - [ ] **OAUTH-04**: A failed/revoked refresh marks the credential as needing re-auth and is visible in the UI
 - [ ] **OAUTH-05**: Before adding the first credential of a subscription provider, the user must acknowledge the ToS/account-ban risk for that provider
+- [ ] **OAUTH-06**: Every OAuth/subscription provider (and any provider with an official client tool) sends upstream traffic indistinguishable from the provider's official tool — User-Agent, special headers, magic bytes/body markers, identity blocks, client/session IDs, OAuth parameters, and transport fingerprint where feasible; only prompt content may differ. Applies to chat, refresh, probe and discovery calls; tool versions are configurable
 
 ### Built-in Providers
 
@@ -92,7 +93,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **PROVB-04**: NVIDIA provider (API key, OpenAI endpoint, discovery, rerank)
 - [ ] **PROVB-05**: Cloudflare Workers AI provider (API token + account id, OpenAI-compatible endpoint)
 - [ ] **PROVB-06**: FreeInference provider
-- [ ] **PROVB-07**: Claude Code provider (Anthropic OAuth paste-code flow, minimum required wire contract, usage probe)
+- [ ] **PROVB-07**: Claude Code provider (Anthropic OAuth paste-code flow, official-tool request fidelity per OAUTH-06, usage probe)
 - [ ] **PROVB-08**: GitHub Copilot provider (device flow, token exchange, chat/messages/responses endpoints, quota probe)
 - [ ] **PROVB-09**: Codex provider (ChatGPT OAuth device/paste flow, Responses upstream codec, usage probe)
 - [ ] **PROVB-10**: Antigravity provider (Google OAuth paste flow, Gemini v1internal upstream codec, project onboarding, model/quota probe)
@@ -171,7 +172,6 @@ Deferred to future release. Tracked but not in current roadmap.
 |---------|--------|
 | Built-in admin authentication | Admin-only UI on a separate port; protected by firewall / reverse-proxy SSO |
 | Mid-stream failover | Cannot splice two models' outputs without corrupting the stream; fallback only before commit |
-| Fingerprint/TLS cloaking arms race | Maintenance treadmill, ToS-adjacent; only minimum wire contract per provider |
 | Prompt compression, tool renaming, system-prompt JSON injection | Violates transparency and breaks prompt caching |
 | Semantic response cache | Wrong answers for "similar" prompts; upstream prompt caching covers the cost win |
 | Anthropic-format non-chat modalities | Anthropic has no embeddings/image/audio/video APIs; non-chat is OpenAI-shape only |
@@ -186,12 +186,114 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
+| FOUND-01 | Phase 1 | Pending |
+| FOUND-02 | Phase 1 | Pending |
+| FOUND-03 | Phase 1 | Pending |
+| FOUND-04 | Phase 1 | Pending |
+| FOUND-05 | Phase 1 | Pending |
+| FOUND-06 | Phase 2 | Pending |
+| FOUND-07 | Phase 1 | Pending |
+| KEYS-01 | Phase 1 | Pending |
+| KEYS-02 | Phase 1 | Pending |
+| KEYS-03 | Phase 1 | Pending |
+| KEYS-04 | Phase 1 | Pending |
+| PROV-01 | Phase 2 | Pending |
+| PROV-02 | Phase 2 | Pending |
+| PROV-03 | Phase 2 | Pending |
+| PROV-04 | Phase 2 | Pending |
+| PROV-05 | Phase 2 | Pending |
+| PROV-06 | Phase 2 | Pending |
+| PROV-07 | Phase 2 | Pending |
+| PROV-08 | Phase 2 | Pending |
+| API-01 | Phase 2 | Pending |
+| API-02 | Phase 2 | Pending |
+| API-03 | Phase 6 | Pending |
+| API-04 | Phase 6 | Pending |
+| API-05 | Phase 2 | Pending |
+| API-06 | Phase 2 | Pending |
+| API-07 | Phase 2 | Pending |
+| CACHE-01 | Phase 2 | Pending |
+| CACHE-02 | Phase 2 | Pending |
+| CACHE-03 | Phase 6 | Pending |
+| CACHE-04 | Phase 4 | Pending |
+| CACHE-05 | Phase 4 | Pending |
+| CACHE-06 | Phase 5 | Pending |
+| ROUTE-01 | Phase 3 | Pending |
+| ROUTE-02 | Phase 3 | Pending |
+| ROUTE-03 | Phase 3 | Pending |
+| ROUTE-04 | Phase 3 | Pending |
+| ROUTE-05 | Phase 3 | Pending |
+| ROUTE-06 | Phase 3 | Pending |
+| ROUTE-07 | Phase 3 | Pending |
+| ROUTE-08 | Phase 3 | Pending |
+| LIMIT-01 | Phase 4 | Pending |
+| LIMIT-02 | Phase 4 | Pending |
+| LIMIT-03 | Phase 4 | Pending |
+| LIMIT-04 | Phase 10 | Pending |
+| LIMIT-05 | Phase 8 | Pending |
+| LIMIT-06 | Phase 8 | Pending |
+| LIMIT-07 | Phase 8 | Pending |
+| LIMIT-08 | Phase 4 | Pending |
+| OAUTH-01 | Phase 9 | Pending |
+| OAUTH-02 | Phase 9 | Pending |
+| OAUTH-03 | Phase 9 | Pending |
+| OAUTH-04 | Phase 9 | Pending |
+| OAUTH-05 | Phase 9 | Pending |
+| OAUTH-06 | Phase 9 | Pending |
+| PROVB-01 | Phase 8 | Pending |
+| PROVB-02 | Phase 8 | Pending |
+| PROVB-03 | Phase 8 | Pending |
+| PROVB-04 | Phase 8 | Pending |
+| PROVB-05 | Phase 8 | Pending |
+| PROVB-06 | Phase 8 | Pending |
+| PROVB-07 | Phase 9 | Pending |
+| PROVB-08 | Phase 9 | Pending |
+| PROVB-09 | Phase 9 | Pending |
+| PROVB-10 | Phase 12 | Pending |
+| PROVB-11 | Phase 13 | Pending |
+| XLAT-01 | Phase 6 | Pending |
+| XLAT-02 | Phase 6 | Pending |
+| XLAT-03 | Phase 6 | Pending |
+| XLAT-04 | Phase 6 | Pending |
+| XLAT-05 | Phase 13 | Pending |
+| XLAT-06 | Phase 6 | Pending |
+| XLAT-07 | Phase 6 | Pending |
+| MODAL-01 | Phase 7 | Pending |
+| MODAL-02 | Phase 7 | Pending |
+| MODAL-03 | Phase 7 | Pending |
+| MODAL-04 | Phase 7 | Pending |
+| MODAL-05 | Phase 7 | Pending |
+| PROXY-01 | Phase 10 | Pending |
+| PROXY-02 | Phase 10 | Pending |
+| PROXY-03 | Phase 10 | Pending |
+| PROXY-04 | Phase 10 | Pending |
+| LOG-01 | Phase 5 | Pending |
+| LOG-02 | Phase 5 | Pending |
+| LOG-03 | Phase 5 | Pending |
+| LOG-04 | Phase 5 | Pending |
+| LOG-05 | Phase 5 | Pending |
+| LOG-06 | Phase 5 | Pending |
+| UI-01 | Phase 1 | Pending |
+| UI-02 | Phase 3 | Pending |
+| UI-03 | Phase 3 | Pending |
+| UI-04 | Phase 4 | Pending |
+| UI-05 | Phase 1 | Pending |
+| OPS-01 | Phase 11 | Pending |
+| OPS-02 | Phase 11 | Pending |
+| OPS-03 | Phase 11 | Pending |
+| OPS-04 | Phase 11 | Pending |
+| OPS-05 | Phase 11 | Pending |
 
 **Coverage:**
-- v1 requirements: 96 total
-- Mapped to phases: 0
-- Unmapped: 96 ⚠️
+- v1 requirements: 97 total
+- Mapped to phases: 97
+- Unmapped: 0 ✓
+
+**Notes:**
+- XLAT-05 maps to Phase 13 (Cursor) because it is only complete once all three exotic upstream codecs exist. The Codex Responses codec (Phase 9) and the Antigravity Gemini codec (Phase 12) are delivered under PROVB-09 and PROVB-10.
+- UI-01 (admin UI shell/design system) maps to Phase 1. Each later phase adds the management pages for its own capability under that capability's requirements.
+- ROUTE-03 maps to Phase 3: the candidate filter consults the cooldown-tracker trait there (verified with a stub). The real cooldown/terminal tracker (LIMIT-01/02/03/08) lands in Phase 4, so skipping of cooled-down and terminal credentials becomes live in Phase 4.
 
 ---
 *Requirements defined: 2026-09-28*
-*Last updated: 2026-09-28 after initial definition*
+*Last updated: 2026-09-28 after roadmap revision (Phase 3 split into Fallback & Combos and Cooldowns, Health & Affinity)*

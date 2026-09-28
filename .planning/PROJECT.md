@@ -48,6 +48,7 @@ A client tool pointed at rsrouter with a single client API key can pick any mode
 - [ ] Claude Code, Codex, Antigravity, Copilot, Cursor (OAuth/subscription)
 - [ ] FreeInference, NVIDIA, Cloudflare, OpenRouter, DeepSeek, Z.ai
 - [ ] OAuth login flows like OmniRoute's, but rsrouter shows the auth URL for the user to open in their own logged-in browser; the user pastes back the callback URL or token; tokens auto-refresh
+- [ ] **Provider fidelity (MANDATORY):** every OAuth/subscription provider's upstream traffic mimics the provider's official tool as closely as possible — User-Agent, special headers, header order, magic bytes/body markers, identity/system blocks, client/session IDs, TLS/HTTP fingerprint where feasible, OAuth flow parameters — so requests are indistinguishable from the original tool's usage; the only thing allowed to differ is the prompt content itself (rsrouter does not rewrite client prompts to hide its use). Applies to every OAuth/subscription provider and to any provider that has an official client tool
 
 **Observability**
 - [ ] Interactive logs showing the route taken per request (client key, combo, each attempt/skip/cooldown, final upstream key/model/proxy) and chat data (request/response bodies)
@@ -85,7 +86,8 @@ A client tool pointed at rsrouter with a single client API key can pick any mode
 - **Database**: SQLite with automated migrations — simple self-hosting, zero ops
 - **Resource usage**: As lean as possible, low memory footprint, while handling multi-threaded, highly concurrent (streaming) AI API requests well — self-hosted on small machines (e.g. 1GB VMs, Raspberry Pi)
 - **Architecture**: Loosely coupled, components swappable (providers, translators, strategies, storage, proxy transport) — long-lived public project
-- **Transparency**: Minimal prompt/body modification between client and upstream — preserves client behavior and upstream caching
+- **Transparency**: Minimal prompt/body modification between client and upstream — preserves client behavior and upstream caching. Exception: whatever an OAuth/subscription provider's official tool sends (headers, identity blocks, markers) MUST be reproduced — provider fidelity wins over minimal modification for those providers
+- **Provider fidelity (MANDATORY)**: OAuth/subscription providers (and any provider with an official client tool) must be implemented to be indistinguishable from the provider's own official tool, apart from the prompt content itself (User-Agent, special headers, magic bytes, identity/system blocks, client IDs, fingerprints). Port these exactly from OmniRoute and the real clients, and keep versions configurable so they can be updated as the tools change — user directive, 2026-09-28
 - **Portability**: amd64 + arm64
 
 ## Key Decisions
@@ -99,6 +101,7 @@ A client tool pointed at rsrouter with a single client API key can pick any mode
 | OAuth via copy-URL / paste-callback | Works headless/remote; mirrors OmniRoute | — Pending |
 | Cache affinity via client key + stable prefix hash | Aligns with how upstream prompt caching works | — Pending |
 | Port provider logic from OmniRoute | Proven quirks/auth handling from day 1 | — Pending |
+| OAuth providers mimic their official tool (indistinguishable requests) | User directive; reduces detection/ban risk for subscription accounts; supersedes research's "minimum wire contract only" recommendation | — Pending |
 
 ## Evolution
 
