@@ -1,0 +1,1 @@
+{"content":"CLIProxyAPI (router-for-me): Go proxy wrapping Antigravity, Codex, Claude Code, Grok Build etc. via OAuth; exposes OpenAI/Gemini/Claude/Codex-compatible APIs; multi-account round-robin with failover; streaming, function calling, multimodal.","source":"web","provider":"websearch","confidence":"LOW","fetched_at":"2026-09-28T19:59:26.400Z","ttl":86400000,"kind":"web"}

@@ -1,0 +1,1 @@
+{"content":"claude-code-router (musistudio): Anthropic-in proxy for Claude Code; scenario routing (default/background/think/longContext/webSearch/image), transformer pipeline plugins, custom router script, /model switching.","source":"web","provider":"websearch","confidence":"LOW","fetched_at":"2026-09-28T19:59:26.546Z","ttl":86400000,"kind":"web"}

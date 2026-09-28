@@ -1,0 +1,1 @@
+{"content":"LiteLLM proxy: router with fallbacks (incl. context-window fallbacks), retries, cooldown after allowed_fails per minute, virtual keys with per-key/team router settings, cost tracking.","source":"web","provider":"websearch","confidence":"LOW","fetched_at":"2026-09-28T19:59:26.255Z","ttl":86400000,"kind":"web"}
